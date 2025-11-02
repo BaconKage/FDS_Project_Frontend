@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
+/* ---------- Backend base URL (env-first) ---------- */
+const API =
+  import.meta.env.VITE_API_URL?.toString().replace(/\/+$/, "") ||
+  (typeof window !== "undefined" ? window.location.origin : "");
+
 /* --- Safely render Plotly HTML strings --- */
 function PlotlyHTML({ html }: { html?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -49,13 +54,19 @@ export default function Dashboard() {
 
   /* Load global KPIs + charts */
   useEffect(() => {
-    fetch("https://fds-project-backend.onrender.com/dashboard")
-      .then((r) => r.json())
-      .then((d: DashboardResp) => {
+    (async () => {
+      try {
+        const r = await fetch(`${API}/dashboard`, {
+          headers: { Accept: "application/json" },
+        });
+        if (!r.ok) throw new Error(`Dashboard ${r.status} ${r.statusText}`);
+        const d: DashboardResp = await r.json();
         setCards(d.cards || []);
         setGlobalCharts(d.charts || {});
-      })
-      .catch((e) => setError(String(e)));
+      } catch (e: any) {
+        setError(String(e?.message || e));
+      }
+    })();
   }, []);
 
   /* Load personalized comparison if we have a saved submission */
@@ -64,21 +75,28 @@ export default function Dashboard() {
     if (!raw) return;
     try {
       const last = JSON.parse(raw);
-      fetch("https://fds-project-backend.onrender.com/compare", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          Height: last.Height,
-          Weight: last.Weight,
-          SystolicBP: last.SystolicBP,
-          DiastolicBP: last.DiastolicBP,
-          HeartRate: last.HeartRate,
-          SleepDuration: last.SleepDuration,
-        }),
-      })
-        .then((r) => r.json())
-        .then((d: CompareResp) => setCmp(d))
-        .catch((e) => console.error(e));
+      (async () => {
+        try {
+          const r = await fetch(`${API}/compare`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              Height: last.Height,
+              Weight: last.Weight,
+              SystolicBP: last.SystolicBP,
+              DiastolicBP: last.DiastolicBP,
+              HeartRate: last.HeartRate,
+              SleepDuration: last.SleepDuration,
+            }),
+          });
+          if (!r.ok) throw new Error(`Compare ${r.status} ${r.statusText}`);
+          const d: CompareResp = await r.json();
+          setCmp(d);
+        } catch (e) {
+          // non-fatal for page render; just log
+          console.error(e);
+        }
+      })();
     } catch (e) {
       console.error(e);
     }
@@ -159,8 +177,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Charts: 2-column grid with generous spacing.
-          Prefer personalized charts if present; otherwise fall back to global. */}
+      {/* Charts */}
       <div className="lg:col-span-3 grid grid-cols-1 xl:grid-cols-2 gap-8">
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
           <h3 className="font-semibold mb-2 text-gray-800">
