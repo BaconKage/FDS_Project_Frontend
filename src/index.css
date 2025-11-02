@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Base resets & typography ---------- */
+@layer base {
+  body {
+    @apply antialiased text-gray-900 bg-gray-50;
+    /* soft ambient backdrop */
+    background-image:
+      radial-gradient(900px 350px at 110% -10%, rgba(16,185,129,0.08), transparent),
+      radial-gradient(700px 280px at -10% 20%, rgba(59,130,246,0.06), transparent);
+  }
+
+  /* number inputs without spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] { -moz-appearance: textfield; }
+
+  /* focus ring for better a11y */
+  *:focus-visible { @apply outline-none ring-2 ring-emerald-500/60 ring-offset-2 ring-offset-white; }
+
+  /* thin, subtle scrollbars */
+  * { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+  *::-webkit-scrollbar { width: 8px; height: 8px; }
+  *::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+}
+
+/* ---------- Reusable UI helpers ---------- */
+@layer components {
+  /* Page container */
+  .app-container { @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8; }
+
+  /* Cards & sections */
+  .card        { @apply bg-white rounded-2xl border border-gray-200 shadow-sm; }
+  .card-pad    { @apply p-5 sm:p-6; }
+  .section     { @apply card; }
+  .section-pad { @apply card-pad; }
+
+  /* Titles */
+  .title-xl { @apply text-3xl font-bold text-gray-900 tracking-tight; }
+  .title-sm { @apply text-sm font-medium text-gray-700; }
+
+  /* Primary action button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-4 py-3 rounded-lg
+           bg-emerald-500 text-white font-medium
+           transition hover:bg-emerald-600 focus-visible:ring-emerald-500/70
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Stat card */
+  .stat-card { @apply card p-4; }
+  .stat-label { @apply text-gray-500 text-sm; }
+  .stat-value { @apply mt-1 text-2xl font-semibold tracking-tight; }
+
+  /* Table (comparisons) */
+  .nice-table { @apply min-w-full text-sm; }
+  .nice-th    { @apply text-left text-gray-600 font-medium py-2 pr-4; }
+  .nice-td    { @apply py-2 pr-4; }
+  .nice-row   { @apply border-t; }
+
+  /* Status pills */
+  .pill        { @apply px-2 py-1 rounded text-xs; }
+  .pill-up     { @apply bg-emerald-100 text-emerald-700; }
+  .pill-down   { @apply bg-amber-100 text-amber-700; }
+  .pill-neutral{ @apply bg-gray-100 text-gray-700; }
+}
