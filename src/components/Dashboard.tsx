@@ -49,7 +49,7 @@ export default function Dashboard() {
 
   /* Load global KPIs + charts */
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/dashboard")
+    fetch("https://fds-project-backend.onrender.com/dashboard")
       .then((r) => r.json())
       .then((d: DashboardResp) => {
         setCards(d.cards || []);
@@ -64,7 +64,7 @@ export default function Dashboard() {
     if (!raw) return;
     try {
       const last = JSON.parse(raw);
-      fetch("http://127.0.0.1:5000/compare", {
+      fetch("https://fds-project-backend.onrender.com/compare", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
