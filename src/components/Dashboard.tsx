@@ -111,6 +111,30 @@ export default function Dashboard() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Tableau at the top */}
+      <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+        <h3 className="font-semibold mb-2 text-gray-800">
+          Global Health Dataset – Tableau Visualization
+        </h3>
+        <p className="text-sm text-gray-500 mb-4">
+          Visualization of the same cleaned dataset in Tableau, as required for the course.
+        </p>
+        <div style={{ position: "relative", paddingTop: "56.25%" }}>
+          <iframe
+            src="https://public.tableau.com/views/WorldHealthDashboard_17621721986600/WorldHealthDashboard?:showVizHome=no&:embed=true"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              border: "none",
+            }}
+            allowFullScreen
+          ></iframe>
+        </div>
+      </div>
+
       {/* KPI Cards */}
       <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
         {cards.map((c, i) => (
@@ -177,7 +201,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Charts */}
+      {/* Plotly charts */}
       <div className="lg:col-span-3 grid grid-cols-1 xl:grid-cols-2 gap-8">
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
           <h3 className="font-semibold mb-2 text-gray-800">
@@ -223,30 +247,6 @@ export default function Dashboard() {
             Aim for 7–8 hours/night; dashed line marks your sleep duration.
           </p>
           <PlotlyHTML html={cmp?.charts?.sleep_hist ?? globalCharts.sleep_hist} />
-        </div>
-      </div>
-
-      {/* Tableau embed */}
-      <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
-        <h3 className="font-semibold mb-2 text-gray-800">
-          Global Health Dataset – Tableau Visualization
-        </h3>
-        <p className="text-sm text-gray-500 mb-4">
-          Visualization of the same cleaned dataset in Tableau, as required for the course.
-        </p>
-        <div style={{ position: "relative", paddingTop: "56.25%" }}>
-          <iframe
-            src="https://public.tableau.com/views/WorldHealthDashboard_17621721986600/WorldHealthDashboard?:showVizHome=no&:embed=true"
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              border: "none",
-            }}
-            allowFullScreen
-          ></iframe>
         </div>
       </div>
     </div>
