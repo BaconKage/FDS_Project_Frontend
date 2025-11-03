@@ -93,7 +93,6 @@ export default function Dashboard() {
           const d: CompareResp = await r.json();
           setCmp(d);
         } catch (e) {
-          // non-fatal for page render; just log
           console.error(e);
         }
       })();
@@ -131,7 +130,8 @@ export default function Dashboard() {
           <div className="flex items-baseline justify-between gap-3 mb-3">
             <h3 className="font-semibold text-gray-800">Your Stats vs Global Dataset</h3>
             <p className="text-xs text-gray-500">
-              “Percentile” shows where you stand within the dataset (higher = larger than more people).
+              “Percentile” shows where you stand within the dataset (higher = larger than more
+              people).
             </p>
           </div>
           <div className="overflow-x-auto">
@@ -223,6 +223,30 @@ export default function Dashboard() {
             Aim for 7–8 hours/night; dashed line marks your sleep duration.
           </p>
           <PlotlyHTML html={cmp?.charts?.sleep_hist ?? globalCharts.sleep_hist} />
+        </div>
+      </div>
+
+      {/* Tableau embed */}
+      <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+        <h3 className="font-semibold mb-2 text-gray-800">
+          Global Health Dataset – Tableau Visualization
+        </h3>
+        <p className="text-sm text-gray-500 mb-4">
+          Visualization of the same cleaned dataset in Tableau, as required for the course.
+        </p>
+        <div style={{ position: "relative", paddingTop: "56.25%" }}>
+          <iframe
+            src="https://public.tableau.com/views/WorldHealthDashboard_17621721986600/WorldHealthDashboard?:showVizHome=no&:embed=true"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              border: "none",
+            }}
+            allowFullScreen
+          ></iframe>
         </div>
       </div>
     </div>
